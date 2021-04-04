@@ -1,0 +1,13 @@
+---
+# defaults file for radicale
+radicale_dir: "/srv/radicale"
+radicale_venv: "{{ radicale_dir }}/venv"
+radicale_service_name: "radicale"
+radicale_service_file: "/etc/systemd/system/{{ radicale_service_name }}.service"
+radicale_user: radicale
+radicale_ip: 127.0.0.1
+radicale_port: 5232
+radicale_uwsgi_workers: 2
+radicale_config: "{{ radicale_dir }}/config"
+radicale_collections: "{{ radicale_dir }}/collections"
+radicale_passfile: "{{ radicale_dir }}/users"

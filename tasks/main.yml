@@ -1,0 +1,38 @@
+---
+- name: Add user
+  ansible.builtin.user:
+    name: "{{ radicale_user }}"
+    create_home: True
+    home: "{{ radicale_dir }}"
+    comment: "Radicale CardDAV/CalDAV user"
+
+- name: create venv
+  pip:
+    name:
+      - radicale
+      - gunicorn
+    virtualenv: "{{ radicale_venv }}"
+    virtualenv_command: pyvenv-3.6
+
+- name: render config
+  template:
+    src: config.j2
+    dest: "{{ radicale_dir }}/config"
+    owner: "{{ radicale_user }}"
+    mode: '0644'
+
+- name: render service file
+  template:
+    src: radicale.service.j2
+    dest: "{{ radicale_service_file }}"
+    owner: root
+    group: root
+    mode: '644'
+  notify:
+    - reload_systemd
+    - reload_service
+
+- name: enable radicale service
+  systemd:
+    name: "{{ radicale_service_name }}"
+    enabled: yes
